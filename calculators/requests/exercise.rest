@@ -1,0 +1,49 @@
+POST http://localhost:3002/exercise
+Content-Type: application/json
+
+{
+  "daily_exercises": [1, 0, 2, 0, 3, 0, 2.5],
+  "target": 2.5
+}
+
+### no daily
+POST http://localhost:3002/exercise
+Content-Type: application/json
+
+{
+  "target": 2.5
+}
+
+### no target
+POST http://localhost:3002/exercise
+Content-Type: application/json
+
+{
+  "daily_exercises": [1, 0, 2, 0, 3, 0, 2.5]
+}
+
+### malformatted daily
+POST http://localhost:3002/exercise
+Content-Type: application/json
+
+{
+  "daily_exercises": "hmm",
+  "target": 2.5
+}
+### malformatted daily 2
+POST http://localhost:3002/exercise
+Content-Type: application/json
+
+{
+  "daily_exercises": ["e","o"],
+  "target": 2.5
+}
+
+### malformatted target
+POST http://localhost:3002/exercise
+Content-Type: application/json
+
+{
+  "daily_exercises": [1, 0, 2, 0, 3, 0, 2.5],
+  "target": "asd"
+}
