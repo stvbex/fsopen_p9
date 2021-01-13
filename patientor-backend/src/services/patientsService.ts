@@ -1,15 +1,15 @@
 import patients from '../../data/patients';
 import { v4 as uuidv4} from 'uuid';
-import { DisplayedPatient, NewPatientData, Patient } from '../types';
+import { DisplayedPatient, Entry, NewPatientData, Patient } from '../types';
 
 const getAllPatients = (): DisplayedPatient[] => {
-  return patients.map(({ id, name, dateOfBirth, gender, occupation }) => ({
+  return patients.map(({ id, name, dateOfBirth, gender, occupation, entries }) => ({
     id,
     name,
     dateOfBirth,
     gender,
     occupation,
-    entries: []
+    entries
   }));
 };
 
@@ -27,7 +27,22 @@ const getPatientById = (id: string): Patient | undefined => {
   const patient =  patients.find(p => p.id === id);
 
   if (patient) {
-    return {...patient, entries: []} as Patient;
+    return patient;
+  }
+  return undefined;
+}
+
+const addNewEntry = (id: string, newEntryData: Omit<Entry, 'id'>): Patient | undefined => {
+  const patient =  patients.find(p => p.id === id);
+
+  if (patient) {
+    const newEntry: Entry = {
+      id: uuidv4(),
+      ...newEntryData
+    } as Entry
+    patient.entries = [newEntry].concat(patient.entries);
+
+    return patient;
   }
   return undefined;
 }
@@ -35,5 +50,6 @@ const getPatientById = (id: string): Patient | undefined => {
 export default {
   getAllPatients,
   addNewPatient,
-  getPatientById
+  getPatientById,
+  addNewEntry
 };

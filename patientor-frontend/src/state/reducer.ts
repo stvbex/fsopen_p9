@@ -1,15 +1,23 @@
 import { State } from "./state";
-import { Patient } from "../types";
+import { Diagnosis, Patient } from "../types";
 
 export type Action =
   | {
-      type: "SET_PATIENT_LIST";
-      payload: Patient[];
-    }
+    type: "SET_PATIENT_LIST";
+    payload: Patient[];
+  }
   | {
-      type: "ADD_PATIENT";
-      payload: Patient;
-    }
+    type: "SET_DIAGNOSES";
+    payload: Diagnosis[];
+  }
+  | {
+    type: "ADD_PATIENT";
+    payload: Patient;
+  }
+  | {
+    type: "ADD_ENTRY";
+    payload: Patient;
+  }
   | {
     type: "SET_CURRENT_PATIENT";
     payload: Patient;
@@ -28,6 +36,11 @@ export const reducer = (state: State, action: Action): State => {
           ...state.patients
         }
       };
+    case "SET_DIAGNOSES":
+      return {
+        ...state,
+        diagnoses: action.payload
+      }
     case "ADD_PATIENT":
       return {
         ...state,
@@ -36,6 +49,15 @@ export const reducer = (state: State, action: Action): State => {
           [action.payload.id]: action.payload
         }
       };
+    case 'ADD_ENTRY':
+      return {
+        ...state,
+        patients: {
+          ...state.patients,
+          [action.payload.id]: action.payload
+        },
+        currentPatient: action.payload
+      }
     case "SET_CURRENT_PATIENT":
       return {
         ...state,
@@ -45,3 +67,39 @@ export const reducer = (state: State, action: Action): State => {
       return state;
   }
 };
+
+
+export const setPatientList = (patientListFromApi: Patient[]): Action => {
+  return {
+    type: "SET_PATIENT_LIST",
+    payload: patientListFromApi
+  }
+}
+
+export const setDiagnoses = (diagnoses: Diagnosis[]): Action => {
+  return {
+    type: "SET_DIAGNOSES",
+    payload: diagnoses
+  }
+}
+
+export const addPatient = (newPatient: Patient): Action => {
+  return {
+    type: "ADD_PATIENT",
+    payload: newPatient
+  }
+}
+
+export const addEntry = (modifiedPatient: Patient): Action => {
+  return {
+    type: 'ADD_ENTRY',
+    payload: modifiedPatient
+  }
+}
+
+export const setCurrentPatient = (patient: Patient): Action => {
+  return {
+    type: "SET_CURRENT_PATIENT",
+    payload: patient
+  }
+}
